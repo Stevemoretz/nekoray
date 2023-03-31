@@ -1,0 +1,54 @@
+name: Update Apt Repo on Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Config Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p /home/runner/.ssh
+          cat >/home/runner/.ssh/config <<-EOF
+          Host github.com
+            HostName github.com
+            User git
+            IdentityFile /home/runner/.ssh/key
+            IdentitiesOnly yes
+          EOF
+
+          cat >/home/runner/.ssh/key <<-EOF
+          ${{ secrets.TOKEN }}
+          EOF
+          chmod +r /home/runner/.ssh/key
+          sudo chmod 600 /home/runner/.ssh/key
+
+          git clone git@github.com:tdjnodj/apt.git
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev gpg
+
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SIGNING_PASSWORD }}
+
+      - name: Sign and Update Apt Repo
+        run: |
+          cd apt/
+
+          bash ./lib/nekoray.sh
+
+      - name: Push
+        run: |
+          cd apt/
+          git add .
+          git commit -m "generated"
+          git push
