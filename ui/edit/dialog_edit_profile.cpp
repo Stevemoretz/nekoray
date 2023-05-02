@@ -8,6 +8,7 @@
 #include "ui/edit/edit_trojan_vless.h"
 #include "ui/edit/edit_naive.h"
 #include "ui/edit/edit_hysteria.h"
+#include "ui/edit/edit_shadowtls.h"
 #include "ui/edit/edit_custom.h"
 
 #include "fmt/includes.h"
@@ -100,6 +101,15 @@ DialogEditProfile::DialogEditProfile(const QString &_type, int profileOrGroupId,
                 ui->reality_pbk_l->hide();
                 ui->reality_sid_l->hide();
             }
+            if (type == "shadowtls") {
+                ui->reality_pbk->hide();
+                ui->reality_sid->hide();
+                ui->reality_pbk_l->hide();
+                ui->reality_sid_l->hide();
+                ui->network_box->hide();
+                ui->network->hide();
+                ui->packet_encoding->hide();
+            }
         } else {
             ui->security_box->setVisible(false);
             ui->reality_box->setVisible(false);
@@ -123,6 +133,9 @@ DialogEditProfile::DialogEditProfile(const QString &_type, int profileOrGroupId,
         LOAD_TYPE("vless");
         LOAD_TYPE("naive");
         LOAD_TYPE("hysteria");
+        if (IS_NEKO_BOX) {
+            LOAD_TYPE("shadowtls");
+        };
         ui->type->addItem(tr("Custom (%1 outbound)").arg(software_core_name), "internal");
         ui->type->addItem(tr("Custom (%1 config)").arg(software_core_name), "internal-full");
         ui->type->addItem(tr("Custom (Extra Core)"), "custom");
@@ -178,6 +191,10 @@ void DialogEditProfile::typeSelected(const QString &newType) {
         innerEditor = _innerWidget;
     } else if (type == "hysteria") {
         auto _innerWidget = new EditHysteria(this);
+        innerWidget = _innerWidget;
+        innerEditor = _innerWidget;
+    } else if (type == "shadowtls") {
+        auto _innerWidget = new EditShadowTLS(this);
         innerWidget = _innerWidget;
         innerEditor = _innerWidget;
     } else if (type == "custom" || type == "internal" || type == "internal-full") {
@@ -292,7 +309,7 @@ void DialogEditProfile::typeSelected(const QString &newType) {
             ui->network->setVisible(false);
             ui->network_box->setVisible(false);
         }
-        if (type == "vmess" || type == "vless" || type == "trojan" || type == "http") {
+        if (type == "vmess" || type == "vless" || type == "trojan" || type == "http" || type == "shadowtls") {
             ui->security->setVisible(true);
             ui->security_l->setVisible(true);
         } else {

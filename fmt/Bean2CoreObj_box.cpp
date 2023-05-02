@@ -188,6 +188,28 @@ namespace NekoRay::fmt {
         return result;
     }
 
+    CoreObjOutboundBuildResult ShadowTLSBean::BuildCoreObjSingBox() {
+        CoreObjOutboundBuildResult result;
+        QJsonObject outbound{
+            {"type", "shadowtls"},
+            {"server", serverAddress},
+            {"server_port", serverPort},
+            {"version", shadowTLSVersion},
+            {"password", password},
+        };
+        QJsonObject tls{
+            {"enabled", true},
+            {"insecure", false},
+            {"server_name", serverAddress},
+            {"alpn", QJsonArray{shadowTLSVersion}},
+        };
+        outbound["tls"] = tls;
+
+        stream->BuildStreamSettingsSingBox(&outbound);
+        result.outbound = outbound;
+        return result;
+    }
+
     CoreObjOutboundBuildResult CustomBean::BuildCoreObjSingBox() {
         CoreObjOutboundBuildResult result;
 

@@ -833,6 +833,21 @@ This needs to be run NekoBox with administrator privileges.</source>
         <source>Plugin</source>
         <translation>پلاگین</translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="obsolete">نسخه</translation>
+    </message>
+</context>
+<context>
+    <name>EditShadowTLS</name>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished">نسخه</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EditSocksHttp</name>
