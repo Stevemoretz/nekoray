@@ -1,3 +1,21 @@
+# 和上游有什么不同 / What's Change
+
+- 恢复 macOS 构建 / Build for macOS
+
+- GUI: shadowTLS
+
+- 仍在增加
+
+## TODO
+
+- [ ] GUI:ssh
+
+- [ ] GUI:wireguard
+
+- [ ] GUI:shadowsocksR
+
+- [ ] mux for shadowsocks
+
 # NekoRay
 
 Qt based cross-platform GUI proxy configuration manager (backend: v2ray / sing-box)
