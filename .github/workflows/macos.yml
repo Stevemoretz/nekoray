@@ -1,4 +1,4 @@
-name: Nekoray build matrix for macOS - cmake
+name: Nekoray build matrix - cmake - with macOS
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ windows, darwin ]
+        cross_os: [ windows, linux, darwin ]
         cross_arch: [ amd64 ]
         include:
           - cross_os: public_res
@@ -38,7 +38,7 @@ jobs:
         if: steps.cache-common.outputs.cache-hit != 'true'
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19.4
+          go-version: ^1.20
       - name: Build golang parts
         if: steps.cache-common.outputs.cache-hit != 'true'
         shell: bash
@@ -58,15 +58,13 @@ jobs:
   build-cpp:
     strategy:
       matrix:
-        platform: [ windows-2022, macos-10.15 ]
+        platform: [ windows-2022, ubuntu-20.04, macos-11 ]
         arch: [ x64 ]
       fail-fast: false
 
     runs-on: ${{ matrix.platform }}
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-    needs:
-      - build-go
     steps:
       - name: Checking out sources
         uses: actions/checkout@v3
@@ -80,13 +78,13 @@ jobs:
           toolset: 14.2
           arch: ${{ matrix.arch }}
       - name: Download Artifacts for macOS
-        if: matrix.platform == 'macos-10.15'
+        if: matrix.platform == 'macos-11'
         uses: actions/download-artifact@v3
         with:
           path: download-artifact
       # ========================================================================================================= Qt Install
       - name: macOS - Install Qt 5.15
-        if: matrix.platform == 'macos-10.15'
+        if: matrix.platform == 'macos-11'
         uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
@@ -142,9 +140,18 @@ jobs:
           ninja
           cd ..
           ./libs/deploy_windows64.sh
+      - name: Linux - Generate MakeFile and Build
+        shell: bash
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          docker run --rm \
+            -v $PWD:/nekoray \
+            -w /nekoray \
+            ghcr.io/matsuridayo/debian10-qt5:20230131 \
+            bash -c "mkdir build && pushd build && cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. && ninja && popd &&./libs/deploy_linux64.sh"
       - name: macOS - Generate MakeFile and Build
         shell: bash
-        if: matrix.platform == 'macos-10.15'
+        if: matrix.platform == 'macos-11'
         run: |
           mkdir build
           cd build
@@ -177,13 +184,19 @@ jobs:
           path: download-artifact
       - name: Pack
         run: |
-          source libs/deploy_common.sh
           curl -Lo - https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz | tar xzv
           mv ghr*linux_amd64/ghr .
+          ####
+          source libs/deploy_common.sh
           find . -name artifacts.tgz | xargs -n1 tar xvzf
           cd deployment
+          cp -r public_res/* linux64
           cp -r public_res/* windows64
           rm -rf public_res *.pdb
+          ####
+          mv linux64 nekoray
+          zip -r $version_standalone-linux64.zip nekoray
+          rm -rf nekoray
           ####
           mv windows64 nekoray
           zip -r $version_standalone-windows64.zip nekoray
@@ -191,6 +204,34 @@ jobs:
           ####
           mv macos-amd64/nekoray.dmg $version_standalone-macos-amd64.dmg
           rm -rf macos-amd64
+      - name: Pack Debian
+        if: github.event.inputs.publish != 'y'
+        run: |
+          source libs/deploy_common.sh
+          find . -name artifacts.tgz | xargs -n1 tar xvzf
+          cd deployment
+          cp -r public_res/* linux64
+          cp -r public_res/* windows64
+          rm -rf public_res *.pdb
+          ####
+          bash ../libs/package_debian.sh ${{ github.event.inputs.tag }}
+          mv nekoray.deb $version_standalone-debian-x64.deb
+          sudo rm -rf nekoray
+      - name: Pack AppImage
+        run: |
+          source libs/deploy_common.sh
+          find . -name artifacts.tgz | xargs -n1 tar xvzf
+          cd deployment
+          cp -r public_res/* linux64
+          rm -rf public_res *.pdb
+          ####
+          bash ../libs/package_appimage.sh
+          mv nekoray-x86_64.AppImage $version_standalone-linux-x64.AppImage
+      - name: Clean Up
+        run: |
+          cd deployment
+          rm -rf linux64
+          rm -rf windows64
       - name: Uploading Artifact
         uses: actions/upload-artifact@master
         with:
