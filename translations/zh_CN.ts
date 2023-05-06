@@ -893,6 +893,29 @@ This needs to be run NekoBox with administrator privileges.</source>
     </message>
 </context>
 <context>
+    <name>EditWireGuard</name>
+    <message>
+        <source>mtu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Private Key</source>
+        <translation>私钥</translation>
+    </message>
+    <message>
+        <source>Peer PublicKey</source>
+        <translation>对等端公钥</translation>
+    </message>
+    <message>
+        <source>reserved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre Shared Key</source>
+        <translation>预共享公钥</translation>
+    </message>
+</context>
+<context>
     <name>GroupItem</name>
     <message>
         <source>Update Subscription</source>

@@ -8,4 +8,5 @@
 #include "NaiveBean.hpp"
 #include "HysteriaBean.hpp"
 #include "ShadowTLSBean.hpp"
+#include "WireGuardBean.hpp"
 #include "CustomBean.hpp"

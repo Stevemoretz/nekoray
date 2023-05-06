@@ -9,6 +9,7 @@
 #include "ui/edit/edit_naive.h"
 #include "ui/edit/edit_hysteria.h"
 #include "ui/edit/edit_shadowtls.h"
+#include "ui/edit/edit_wireguard.h"
 #include "ui/edit/edit_custom.h"
 
 #include "fmt/includes.h"
@@ -133,6 +134,7 @@ DialogEditProfile::DialogEditProfile(const QString &_type, int profileOrGroupId,
         LOAD_TYPE("vless");
         LOAD_TYPE("naive");
         LOAD_TYPE("hysteria");
+        LOAD_TYPE("wireguard");
         if (IS_NEKO_BOX) {
             LOAD_TYPE("shadowtls");
         };
@@ -195,6 +197,10 @@ void DialogEditProfile::typeSelected(const QString &newType) {
         innerEditor = _innerWidget;
     } else if (type == "shadowtls") {
         auto _innerWidget = new EditShadowTLS(this);
+        innerWidget = _innerWidget;
+        innerEditor = _innerWidget;
+    } else if (type == "wireguard") {
+        auto _innerWidget = new EditWireGuard(this);
         innerWidget = _innerWidget;
         innerEditor = _innerWidget;
     } else if (type == "custom" || type == "internal" || type == "internal-full") {

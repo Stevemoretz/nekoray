@@ -221,6 +221,10 @@ set(PROJECT_SOURCES
         ui/edit/edit_shadowtls.cpp
         ui/edit/edit_shadowtls.ui
 
+        ui/edit/edit_wireguard.h
+        ui/edit/edit_wireguard.cpp
+        ui/edit/edit_wireguard.ui
+
         ui/edit/edit_custom.h
         ui/edit/edit_custom.cpp
         ui/edit/edit_custom.ui

@@ -210,6 +210,25 @@ namespace NekoRay::fmt {
         return result;
     }
 
+    CoreObjOutboundBuildResult WireGuardBean::BuildCoreObjSingBox() {
+        CoreObjOutboundBuildResult result;
+        QJsonObject outbound{
+            {"type", "wireguard"},
+            {"server", serverAddress},
+            {"server_port", serverPort},
+            {"interface_name", "nekoray_wireguard"},
+            {"local_address", "10.0.0.2/32"},
+            {"private_key", privateKey},
+            {"peer_public_key", peerPublicKey},
+            {"pre_shared_key", preSharedKey},
+            {"reserved", reserved},
+            {"mtu", mtu},
+        };
+
+        result.outbound = outbound;
+        return result;
+    }
+
     CoreObjOutboundBuildResult CustomBean::BuildCoreObjSingBox() {
         CoreObjOutboundBuildResult result;
 

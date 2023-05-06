@@ -2,19 +2,27 @@
 
 - 恢复 macOS 构建 / Build for macOS
 
-- GUI: shadowTLS
+- GUI: shadowTLS(nekobox)
+
+- GUI: WireGuard(nekobox)
 
 - 仍在增加
 
+## 分支简介
+
+由于上游作者嫌麻烦，所以我把自己需要的一些功能放在这里。如果有可能，我会优先提交 Pull Request 到上游而不是这里。
+
+我无意另起炉灶，希望能和上游保持良好的关系。
+
 ## TODO
 
-- [ ] GUI:ssh
+- GUI:ssh
 
-- [ ] GUI:wireguard
+- ~~GUI:wireguard~~
 
-- [ ] GUI:shadowsocksR
+- GUI:shadowsocksR
 
-- [ ] mux for shadowsocks
+- mux for shadowsocks
 
 # NekoRay
 
@@ -117,6 +125,8 @@ XMR
 `49bwESYQjoRL3xmvTcjZKHEKaiGywjLYVQJMUv79bXonGiyDCs8AzE3KiGW2ytTybBCpWJUvov8SjZZEGg66a4e59GXa6k5`
 
 ## Credits
+
+特别感谢：**[MatsuriDayo/nekoray](https://github.com/MatsuriDayo/nekoray/)**。
 
 - [v2fly/v2ray-core](https://github.com/v2fly/v2ray-core)
 - [MatsuriDayo/Matsuri](https://github.com/MatsuriDayo/Matsuri)

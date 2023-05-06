@@ -207,6 +207,40 @@ namespace NekoRay::fmt {
         return result;
     }
 
+    CoreObjOutboundBuildResult WireGuardBean::BuildCoreObjV2Ray() {
+        CoreObjOutboundBuildResult result;
+
+        QJsonObject outbound{
+            {"protocol", "wireguard"},
+            {"settings", QJsonArray{
+                             QJsonObject{
+                                 {"address", serverAddress},
+                                 {"port", serverPort},
+                                 {"local_address", "10.0.0.2/32"},
+                                 {"peerPublicKey", peerPublicKey},
+                                 {"preSharedKey", preSharedKey},
+                                 {"reserved", reserved},
+                                 {"mtu", mtu},
+                             }}},
+        };
+
+        // QJsonObject settings;
+        // settings = QJsonObject{
+        //     {"address", serverAddress},
+        //     {"port", serverPort},
+        //     {"local_address", "10.0.0.2/32"},
+        //     {"peerPublicKey", peerPublicKey},
+        //     {"preSharedKey", preSharedKey},
+        //     {"reserved", reserved},
+        //     {"mtu", mtu},
+        // };
+        // QJsonArray servers;
+        // QJsonObject server;
+
+        result.outbound = outbound;
+        return result;
+    }
+
     CoreObjOutboundBuildResult CustomBean::BuildCoreObjV2Ray() {
         CoreObjOutboundBuildResult result;
 

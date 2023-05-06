@@ -20,6 +20,8 @@ namespace NekoRay {
 
         class ShadowTLSBean;
 
+        class WireGuardBean;
+
         class CustomBean;
 
         class ChainBean;
@@ -65,6 +67,10 @@ namespace NekoRay {
 
         [[nodiscard]] fmt::NaiveBean *NaiveBean() const {
             return (fmt::NaiveBean *) bean.get();
+        };
+
+        [[nodiscard]] fmt::WireGuardBean *WireGuardBean() const {
+            return (fmt::WireGuardBean *) bean.get();
         };
 
         [[nodiscard]] fmt::ShadowTLSBean *ShadowTLSBean() const {
