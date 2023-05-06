@@ -224,19 +224,6 @@ namespace NekoRay::fmt {
                              }}},
         };
 
-        // QJsonObject settings;
-        // settings = QJsonObject{
-        //     {"address", serverAddress},
-        //     {"port", serverPort},
-        //     {"local_address", "10.0.0.2/32"},
-        //     {"peerPublicKey", peerPublicKey},
-        //     {"preSharedKey", preSharedKey},
-        //     {"reserved", reserved},
-        //     {"mtu", mtu},
-        // };
-        // QJsonArray servers;
-        // QJsonObject server;
-
         result.outbound = outbound;
         return result;
     }

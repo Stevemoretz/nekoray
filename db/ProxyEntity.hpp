@@ -22,6 +22,8 @@ namespace NekoRay {
 
         class WireGuardBean;
 
+        class SSHBean;
+
         class CustomBean;
 
         class ChainBean;
@@ -75,6 +77,10 @@ namespace NekoRay {
 
         [[nodiscard]] fmt::ShadowTLSBean *ShadowTLSBean() const {
             return (fmt::ShadowTLSBean *) bean.get();
+        };
+
+        [[nodiscard]] fmt::SSHBean *SSHBean() const {
+            return (fmt::SSHBean *) bean.get();
         };
 
         [[nodiscard]] fmt::HysteriaBean *HysteriaBean() const {

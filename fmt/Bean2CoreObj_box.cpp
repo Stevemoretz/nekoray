@@ -229,6 +229,24 @@ namespace NekoRay::fmt {
         return result;
     }
 
+    CoreObjOutboundBuildResult SSHBean::BuildCoreObjSingBox() {
+        CoreObjOutboundBuildResult result;
+        QJsonObject outbound{
+            {"type", "ssh"},
+            {"server", serverAddress},
+            {"server_port", serverPort},
+            {"user", user},
+            {"password", password},
+            {"private_key", privateKey},
+            {"private_key_passphrase", privateKeyPassphrase},
+            {"host_key", hostKey},
+            {"client_version", clientVersion},
+        };
+
+        result.outbound = outbound;
+        return result;
+    }
+
     CoreObjOutboundBuildResult CustomBean::BuildCoreObjSingBox() {
         CoreObjOutboundBuildResult result;
 

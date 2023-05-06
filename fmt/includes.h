@@ -9,4 +9,5 @@
 #include "HysteriaBean.hpp"
 #include "ShadowTLSBean.hpp"
 #include "WireGuardBean.hpp"
+#include "SSHBean.hpp"
 #include "CustomBean.hpp"

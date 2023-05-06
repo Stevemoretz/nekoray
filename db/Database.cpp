@@ -91,6 +91,8 @@ namespace NekoRay {
             bean = new fmt::ShadowTLSBean();
         } else if (type == "wireguard") {
             bean = new fmt::WireGuardBean();
+        } else if (type == "ssh") {
+            bean = new fmt::SSHBean();
         } else if (type == "custom") {
             bean = new fmt::CustomBean();
         } else {

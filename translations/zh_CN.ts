@@ -818,6 +818,41 @@ This needs to be run NekoBox with administrator privileges.</source>
     </message>
 </context>
 <context>
+    <name>EditSSH</name>
+    <message>
+        <source>Host Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>optional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Private Key Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Private Key</source>
+        <translation type="unfinished">私钥</translation>
+    </message>
+    <message>
+        <source>Defult: Random</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Client Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EditShadowSocks</name>
     <message>
         <source>Plugin Args</source>
@@ -849,6 +884,10 @@ This needs to be run NekoBox with administrator privileges.</source>
     <message>
         <source>Password</source>
         <translation type="unfinished">密码</translation>
+    </message>
+    <message>
+        <source>When using shadowTLS v1, you neddn&apos;t write it.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -913,6 +952,10 @@ This needs to be run NekoBox with administrator privileges.</source>
     <message>
         <source>Pre Shared Key</source>
         <translation>预共享公钥</translation>
+    </message>
+    <message>
+        <source>optional</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
