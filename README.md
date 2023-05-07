@@ -6,6 +6,8 @@
 
 - GUI: WireGuard(nekobox)
 
+- GUI: SSH(nekobox)
+
 - 仍在增加
 
 ## 分支简介
@@ -16,7 +18,7 @@
 
 ## TODO
 
-- GUI:ssh
+- ~~GUI:ssh~~
 
 - ~~GUI:wireguard~~
 
@@ -28,11 +30,11 @@
 
 Qt based cross-platform GUI proxy configuration manager (backend: v2ray / sing-box)
 
-Support Windows / Linux / ~~macOS amd64~~ out of the box now.
+Support Windows / Linux / macOS amd64 out of the box now.
 
 基于 Qt 的跨平台代理配置管理器 (后端 v2ray / sing-box)
 
-目前支持 Windows / Linux / ~~macOS amd64~~ 开箱即用
+目前支持 Windows / Linux / macOS amd64 开箱即用
 
 ## Readme Translations
 
@@ -126,7 +128,7 @@ XMR
 
 ## Credits
 
-特别感谢：**[MatsuriDayo/nekoray](https://github.com/MatsuriDayo/nekoray/)**。
+特别感谢：**[MatsuriDayo/nekoray](https://github.com/MatsuriDayo/nekoray/)**
 
 - [v2fly/v2ray-core](https://github.com/v2fly/v2ray-core)
 - [MatsuriDayo/Matsuri](https://github.com/MatsuriDayo/Matsuri)

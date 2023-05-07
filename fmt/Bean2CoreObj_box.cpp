@@ -239,9 +239,12 @@ namespace NekoRay::fmt {
             {"password", password},
             {"private_key", privateKey},
             {"private_key_passphrase", privateKeyPassphrase},
-            {"host_key", hostKey},
             {"client_version", clientVersion},
         };
+
+        if (!hostKey.isEmpty()) {
+            outbound["host_key"] = hostKey;
+        }
 
         result.outbound = outbound;
         return result;
