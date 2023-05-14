@@ -620,6 +620,17 @@ namespace NekoRay {
                         needMux = false;
                     }
                 }
+                if (stream->multiplex_status == 0) {
+                    if (!dataStore->mux_default_on) needMux = false;
+                } else if (stream->multiplex_status == 2) {
+                    needMux = false;
+                }
+            }
+
+            if (ent->type == "shadowsocks") {
+                if (!IS_NEKO_BOX || outbound["udp_over_tcp"] == true || !outbound["plugin"].isNull()) {
+                    needMux = false;
+                }
             }
 
             if (ent->type == "shadowsocks") {
@@ -876,10 +887,6 @@ namespace NekoRay {
 
         dns["servers"] = dnsServers;
         dns["rules"] = dnsRules;
-
-        if (dataStore->routing->use_dns_object) {
-            dns = QString2QJsonObject(dataStore->routing->dns_object);
-        }
         status->result->coreConfig.insert("dns", dns);
 
         // Routing
