@@ -83,17 +83,17 @@ jobs:
         with:
           path: download-artifact
       # ========================================================================================================= Qt Install
-      - name: macOS - Install Qt 5.15
+      - name: macOS - Install Qt 6.5
         if: matrix.platform == 'macos-11'
         uses: jurplel/install-qt-action@v3
         with:
-          version: 5.15.2
+          version: 6.5.0
           py7zrversion: ' '
           aqtversion: ' '
           setup-python: false
           cache: true
           cache-key-prefix: QtCache-${{ matrix.platform }}-${{ matrix.arch }}
-      - name: Windows - Download Custom Qt 5.15 SDK
+      - name: Windows - Download Custom Qt 6.5 SDK
         shell: bash
         if: matrix.platform == 'windows-2022'
         run: |
@@ -155,7 +155,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
+          cmake -GNinja -DQT_VERSION_MAJOR=6 -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
           ninja
           cd ..
           ./libs/deploy_macos.sh
