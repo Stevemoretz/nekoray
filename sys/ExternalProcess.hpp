@@ -33,6 +33,8 @@ namespace NekoRay::sys {
 
         void Start() override;
 
+        void Restart();
+
     private:
         bool show_stderr = false;
         bool failed_to_start = false;
@@ -40,5 +42,7 @@ namespace NekoRay::sys {
     };
 
     // 手动管理
-    inline QList<QSharedPointer<ExternalProcess>> running_ext;
+    inline std::list<QSharedPointer<ExternalProcess>> running_ext;
+
+    inline QAtomicInt logCounter;
 } // namespace NekoRay::sys

@@ -4,8 +4,10 @@
 #include <QTimer>
 #include <QDir>
 #include <QApplication>
+#include <QElapsedTimer>
 
 namespace NekoRay::sys {
+
     ExternalProcess::ExternalProcess() : QProcess() {
         // qDebug() << "[Debug] ExternalProcess()" << this << running_ext;
         this->env = QProcessEnvironment::systemEnvironment().toStringList();
@@ -21,7 +23,9 @@ namespace NekoRay::sys {
 
         if (managed) {
             connect(this, &QProcess::readyReadStandardOutput, this, [&]() {
-                MW_show_log_ext_vt100(readAllStandardOutput().trimmed());
+                auto log = readAllStandardOutput();
+                if (logCounter.fetchAndAddRelaxed(log.count("\n")) > NekoRay::dataStore->max_log_line) return;
+                MW_show_log_ext_vt100(log);
             });
             connect(this, &QProcess::readyReadStandardError, this, [&]() {
                 MW_show_log_ext_vt100(readAllStandardError().trimmed());
@@ -36,7 +40,7 @@ namespace NekoRay::sys {
             connect(this, &QProcess::stateChanged, this, [&](QProcess::ProcessState state) {
                 if (state == QProcess::NotRunning) {
                     if (killed) { // 用户命令退出
-                        MW_show_log_ext(tag, "Stopped");
+                        MW_show_log_ext(tag, "External core stopped");
                     } else if (!crashed) { // 异常退出
                         crashed = true;
                         MW_show_log_ext(tag, "[Error] Program exited accidentally: " + errorString());
@@ -45,7 +49,7 @@ namespace NekoRay::sys {
                     }
                 }
             });
-            MW_show_log_ext(tag, "[Starting] " + env.join(" ") + " " + program + " " + arguments.join(" "));
+            MW_show_log_ext(tag, "External core starting: " + env.join(" ") + " " + program + " " + arguments.join(" "));
         }
 
         QProcess::setEnvironment(env);
@@ -70,13 +74,19 @@ namespace NekoRay::sys {
         }
     }
 
+    //
+
+    QElapsedTimer coreRestartTimer;
+
     CoreProcess::CoreProcess(const QString &core_path, const QStringList &args) : ExternalProcess() {
         ExternalProcess::managed = false;
         ExternalProcess::program = core_path;
         ExternalProcess::arguments = args;
 
         connect(this, &QProcess::readyReadStandardOutput, this, [&]() {
-            MW_show_log(readAllStandardOutput().trimmed());
+            auto log = readAllStandardOutput();
+            if (logCounter.fetchAndAddRelaxed(log.count("\n")) > NekoRay::dataStore->max_log_line) return;
+            MW_show_log(log);
         });
         connect(this, &QProcess::readyReadStandardError, this, [&]() {
             auto log = readAllStandardError().trimmed();
@@ -97,21 +107,27 @@ namespace NekoRay::sys {
         connect(this, &QProcess::stateChanged, this, [&](QProcess::ProcessState state) {
             NekoRay::dataStore->core_running = state == QProcess::Running;
 
-            if (!dataStore->core_prepare_exit && state == QProcess::NotRunning) {
+            if (!dataStore->prepare_exit && state == QProcess::NotRunning) {
                 if (failed_to_start) return; // no retry
 
-                restart_id = NekoRay::dataStore->started_id;
-                MW_dialog_message("ExternalProcess", "Crashed");
-                MW_show_log("[Error] core exited, restarting.\n");
+                MW_dialog_message("ExternalProcess", "CoreCrashed");
+
+                // Retry rate limit
+                if (coreRestartTimer.isValid()) {
+                    if (coreRestartTimer.restart() < 10 * 1000) {
+                        coreRestartTimer = QElapsedTimer();
+                        MW_show_log("[Error] " + QObject::tr("Core exits too frequently, stop automatic restart this profile."));
+                        return;
+                    }
+                } else {
+                    coreRestartTimer.start();
+                }
 
                 // Restart
-                setTimeout(
-                    [=] {
-                        Kill();
-                        ExternalProcess::started = false;
-                        Start();
-                    },
-                    this, 1000);
+                restart_id = NekoRay::dataStore->started_id;
+                MW_show_log("[Error] " + QObject::tr("Core exited, restarting."));
+
+                setTimeout([=] { Restart(); }, this, 1000);
             } else if (state == QProcess::Running && restart_id >= 0) {
                 // Restart profile
                 setTimeout(
@@ -137,6 +153,12 @@ namespace NekoRay::sys {
         //
         ExternalProcess::Start();
         write((dataStore->core_token + "\n").toUtf8());
+    }
+
+    void CoreProcess::Restart() {
+        Kill();
+        ExternalProcess::started = false;
+        Start();
     }
 
 } // namespace NekoRay::sys
