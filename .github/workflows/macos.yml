@@ -12,6 +12,8 @@ on:
       artifact-pack:
         description: 'artifact-pack: If want ignore'
         required: false
+env:
+  MACOSX_DEPLOYMENT_TARGET: "10.15"  # Add the global environment variable here
 jobs:
   build-go:
     strategy:
