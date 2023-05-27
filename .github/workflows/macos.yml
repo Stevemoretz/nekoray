@@ -60,7 +60,7 @@ jobs:
   build-cpp:
     strategy:
       matrix:
-        platform: [ windows-2022, ubuntu-20.04, macos-10.15 ]
+        platform: [ windows-2022, ubuntu-20.04, macos-11 ]
         arch: [ x64 ]
       fail-fast: false
 
@@ -80,16 +80,16 @@ jobs:
           toolset: 14.2
           arch: ${{ matrix.arch }}
       - name: Download Artifacts for macOS
-        if: matrix.platform == 'macos-10.15'
+        if: matrix.platform == 'macos-11'
         uses: actions/download-artifact@v3
         with:
           path: download-artifact
       # ========================================================================================================= Qt Install
-      - name: macOS - Install Qt 6.5
-        if: matrix.platform == 'macos-10.15'
+      - name: macOS - Install Qt 5.15
+        if: matrix.platform == 'macos-11'
         uses: jurplel/install-qt-action@v3
         with:
-          version: 6.5.0
+          version: 5.15.2
           py7zrversion: ' '
           aqtversion: ' '
           setup-python: false
@@ -157,7 +157,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -GNinja -DQT_VERSION_MAJOR=6 -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
+          cmake -GNinja -DQT_VERSION_MAJOR=5 -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
           ninja
           cd ..
           ./libs/deploy_macos.sh
