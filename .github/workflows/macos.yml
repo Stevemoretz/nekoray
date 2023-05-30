@@ -103,7 +103,8 @@ jobs:
         if: matrix.platform == 'macos-11'
         uses: jurplel/install-qt-action@v3
         with:
-          version: matrix.qt_version
+          DL_QT_VER: ${{ matrix.qt_version }}
+          version: ${{ matrix.qt_version }}
           py7zrversion: ' '
           aqtversion: ' '
           setup-python: false
@@ -114,7 +115,7 @@ jobs:
         if: matrix.platform == 'windows-2022'
         run: |
           mkdir qtsdk ; cd qtsdk
-          if [ "${{ matrix.qt_version }}" == "5.15" ]; then
+          if [ "$DL_QT_VER" == "5.15" ]; then
             curl -LSO https://github.com/MatsuriDayo/nekoray_qt_runtime/releases/download/20220503/Qt5.15.7-Windows-x86_64-VS2019-16.11.20-20221103.7z
           else
             curl -LSO https://github.com/MatsuriDayo/nekoray_qt_runtime/releases/download/20220503/Qt6.5.0-Windows-x86_64-VS2022-17.5.5-20230507.7z
@@ -150,13 +151,18 @@ jobs:
         shell: bash
         if: matrix.platform == 'windows-2022'
         env:
+          DL_QT_VER: ${{ matrix.qt_version }}
           CC: cl.exe
           CXX: cl.exe
         run: |
           source libs/env_qtsdk.sh $PWD/qtsdk/Qt
           mkdir build
           cd build
-          cmake -GNinja -DQT_VERSION_MAJOR=5 -DCMAKE_BUILD_TYPE=Release ..
+          if [ "$DL_QT_VER" == "5.15" ]; then
+            cmake -GNinja -DCMAKE_BUILD_TYPE=Release ..
+          else
+            cmake -GNinja -DQT_VERSION_MAJOR=6 -DCMAKE_BUILD_TYPE=Release ..
+          fi
           ninja
           cd ..
           ./libs/deploy_windows64.sh
@@ -172,10 +178,16 @@ jobs:
       - name: macOS - Generate MakeFile and Build
         shell: bash
         if: matrix.platform == 'macos-11'
+        env:
+          DL_QT_VER: ${{ matrix.qt_version }}
         run: |
           mkdir build
           cd build
-          cmake -GNinja -DQT_VERSION_MAJOR=5 -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
+          if [ "$DL_QT_VER" == "5.15" ]; then
+            cmake -GNinja -DQT_VERSION_MAJOR=5 -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
+          else
+            cmake -GNinja -DQT_VERSION_MAJOR=6 -DCMAKE_BUILD_TYPE=Release -DNKR_PACKAGE_MACOS=1 ..
+          fi
           ninja
           cd ..
           ./libs/deploy_macos.sh
