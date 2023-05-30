@@ -64,7 +64,7 @@ jobs:
           - platform: windows-2022
             arch: x64
             qt_version: "5.15"
-          - platform: windows-20.04
+          - platform: windows-2022
             arch: x64
             qt_version: "6.5"
           - platform: ubuntu-20.04
@@ -156,7 +156,7 @@ jobs:
           source libs/env_qtsdk.sh $PWD/qtsdk/Qt
           mkdir build
           cd build
-          cmake -GNinja -DQT_VERSION_MAJOR=6 -DCMAKE_BUILD_TYPE=Release ..
+          cmake -GNinja -DQT_VERSION_MAJOR=5 -DCMAKE_BUILD_TYPE=Release ..
           ninja
           cd ..
           ./libs/deploy_windows64.sh
